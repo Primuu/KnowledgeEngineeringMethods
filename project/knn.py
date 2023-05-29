@@ -88,23 +88,29 @@ def knn(x_train, y_train, x_test, k=3, metric=euclidean, weighted=False):
 
             # initialize the list of occurrences of each label in its nearest neighbors [including weights]
             # e.g. if there are labels [0, 2, 1, 0], labels_counts will initialize as [0, 0 ,0]
-            label_counts = [0] * (max(k_nearest_labels) + 1)
+            label_counts = {}
             # loop iterating through all nearest labels (enumerate return index + value)
             for i, label in enumerate(k_nearest_labels):
                 # adding weights
-                label_counts[label] += weights[i]
+                if label in label_counts:
+                    label_counts[label] += weights[i]
+                else:
+                    label_counts[label] = weights[i]
 
         # if a weighted classifier is not to be used
         else:
             # initialize the list of occurrences of each label in its nearest neighbors
-            label_counts = [0] * (max(k_nearest_labels) + 1)
+            label_counts = {}
             # iterate through all nearest labels and count them
             for label in k_nearest_labels:
                 # adding number of occurrences
-                label_counts[label] += 1
+                if label in label_counts:
+                    label_counts[label] += 1
+                else:
+                    label_counts[label] = 1
 
         # select label with the most occurrences as the predicted label
-        predicted_label = label_counts.index(max(label_counts))
+        predicted_label = max(label_counts, key=label_counts.get)
 
         y_predict.append(predicted_label)
 
@@ -135,9 +141,10 @@ def accuracy(set_1, set_2):
 iris = load_iris()
 
 # generating random number
-random_number = random.randint(1, 100)
+seed = random.randint(1, 100)
+print("\n                       SEED: " + str(seed) + "\n")
 # data division into training and test sets
-x_train, x_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.3, random_state=random_number)
+x_train, x_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.3, random_state=seed)
 
 # # # # # # # # # # # # # # # # # # # # # # # # EUCLIDEAN # # # # # # # # # # # # # # # # # # # # # # # #
 result_1 = knn(x_train, y_train,  x_test)
