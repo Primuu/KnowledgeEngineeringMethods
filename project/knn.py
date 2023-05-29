@@ -86,8 +86,8 @@ def knn(x_train, y_train, x_test, k=3, metric=euclidean, weighted=False):
                     d = 0.000001
                 weights[i] = 1 / d
 
-            # initialize the list of occurrences of each label in its nearest neighbors [including weights]
-            # e.g. if there are labels [0, 2, 1, 0], labels_counts will initialize as [0, 0 ,0]
+            # create a dictionary to store the occurrences of each label in its nearest neighbors
+            # {label: sum of weights}
             label_counts = {}
             # loop iterating through all nearest labels (enumerate return index + value)
             for i, label in enumerate(k_nearest_labels):
@@ -99,7 +99,8 @@ def knn(x_train, y_train, x_test, k=3, metric=euclidean, weighted=False):
 
         # if a weighted classifier is not to be used
         else:
-            # initialize the list of occurrences of each label in its nearest neighbors
+            # create a dictionary to store the occurrences of each label in its nearest neighbors
+            # {label: number of occurrences}
             label_counts = {}
             # iterate through all nearest labels and count them
             for label in k_nearest_labels:
