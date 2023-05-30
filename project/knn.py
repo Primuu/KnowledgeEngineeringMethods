@@ -83,8 +83,8 @@ def knn(x_train, y_train, x_test, k=3, metric=euclidean, weighted=False):
                 d = distances[index]
                 # to avoid division by 0
                 if distances[index] == 0:
-                    d = 0.000001
-                weights[i] = 1 / d
+                    d = 0.00000001
+                weights[i] = (1 / d) * y_train[index]
 
             # create a dictionary to store the occurrences of each label in its nearest neighbors
             # {label: sum of weights}
